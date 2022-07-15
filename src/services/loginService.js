@@ -25,11 +25,6 @@ async createToken(payload) {
   return token;
 },
 
-async verifyToken(token) {
-  const { data } = jwt.verify(token, secret);
-  return data;
-},
-
 async getByEmail(body) {
   const { email, password } = body;
     const user = await models.User.findOne({

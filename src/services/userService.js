@@ -22,6 +22,14 @@ const userService = {
     return user;
   },
 
+  async getAll() {
+    const user = await models.User.findAll({
+      raw: true,
+      attributes: { exclude: ['password'] },
+    });
+    return user;
+  },
+
   async addUser(body) {
     const user = await models.User.create(body, { raw: true });
     return user;
