@@ -19,6 +19,15 @@ const userController = {
     const userList = await userService.getAll();
     res.status(200).json(userList);
   },
+
+  async getById(req, res) {
+    const token = req.headers.authorization;
+    if (!token) throwTokenError('Token not found');
+    await validateTokenMiddleware.verifyToken(token);
+    const { id } = req.params;
+    const user = await userService.getById(id);
+    res.status(200).json(user);
+  },
 };
 
 module.exports = userController; 

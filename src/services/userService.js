@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const models = require('../database/models');
-const { throwConflictError } = require('./utils');
+const { throwConflictError, throwNotFoundError } = require('./utils');
 
 const userService = {
   async validadeBody(body) {
@@ -19,6 +19,15 @@ const userService = {
       where: { email: body.email },
     });
     if (user) throwConflictError('User already registered');
+    return user;
+  },
+
+  async getById(id) {
+    const user = await models.User.findByPk(id, {
+      raw: true,
+      attributes: { exclude: ['password'] },
+    });
+    if (!user) throwNotFoundError('User does not exist');
     return user;
   },
 
