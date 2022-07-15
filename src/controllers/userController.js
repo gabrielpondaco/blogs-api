@@ -6,7 +6,7 @@ const { throwTokenError } = require('../services/utils');
 const userController = {
   async add(req, res) {
     await userService.validadeBody(req.body);
-    await userService.getUser(req.body);
+    await userService.getByEmail(req.body);
     const user = userService.addUser(req.body);
     const token = await loginService.createToken(user);
     res.status(201).json({ token });

@@ -14,7 +14,7 @@ const userService = {
     return result;
   },
 
-  async getUser(body) {
+  async getByEmail(body) {
     const user = await models.User.findOne({
       where: { email: body.email },
     });

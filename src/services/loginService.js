@@ -25,7 +25,7 @@ async createToken(payload) {
   return token;
 },
 
-async getByEmail(body) {
+async getUserByEmail(body) {
   const { email, password } = body;
     const user = await models.User.findOne({
       where: { email },
