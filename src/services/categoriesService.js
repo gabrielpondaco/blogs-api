@@ -13,6 +13,11 @@ const categoriesService = {
     const user = await models.Category.create(body, { raw: true });
     return user;
   },
+
+  async getAll() {
+    const categories = await models.Category.findAll();
+    return categories;
+  },
 };
 
 module.exports = categoriesService;
