@@ -10,7 +10,14 @@ const throwInvalidFieldsError = (message) => {
   throw err;
 };
 
+const throwConflictError = (message) => {
+  const err = new Error(message);
+  err.name = 'ConflictError';
+  throw err;
+};
+
 module.exports = {
   throwNotFoundError,
   throwInvalidFieldsError,
+  throwConflictError,
 };  

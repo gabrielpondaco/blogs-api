@@ -2,6 +2,7 @@ const errors = {
   ValidationError: 400,
   InvalidFieldsError: 400,
   NotFoundError: 404,
+  ConflictError: 409,
 };
 
 const errorMiddlewareHandler = ({ name, message }, _req, res, _next) => {
