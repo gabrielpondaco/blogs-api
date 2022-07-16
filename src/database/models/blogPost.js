@@ -33,11 +33,7 @@ const attributes = {
 
 /** @param {import('sequelize').Sequelize} sequelize */
 module.exports = (sequelize) => {
-  const blogPost = sequelize.define('BlogPost', attributes, 
-  {
-    tableName: 'BlogPosts',
-    timestamps: false,
-  });
+  const blogPost = sequelize.define('BlogPost', attributes, { tableName: 'BlogPosts', timestamps: false });
   blogPost.associate = (models) => {
     blogPost.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
   };
