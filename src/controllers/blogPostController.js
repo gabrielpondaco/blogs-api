@@ -4,10 +4,12 @@ const validateTokenMiddleware = require('../middlewares/validateTokenMiddleware'
 const { throwTokenError, 
   throwInvalidFieldsError, throwNotFoundError } = require('../services/utils');
 
+const TOKEN_NOT_FOUND_MESSAGE = 'Token not found';
+
 const blogPostController = {
   async add(req, res) {
     const token = req.headers.authorization;
-    if (!token) throwTokenError('Token not found');
+    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
     const { id } = await validateTokenMiddleware.verifyToken(token);
     await blogPostService.validateBody(req.body);
     const exist = await Promise.all(req.body.categoryIds
@@ -21,7 +23,7 @@ const blogPostController = {
 
   async getAll(req, res) {
     const token = req.headers.authorization;
-    if (!token) throwTokenError('Token not found');
+    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
     await validateTokenMiddleware.verifyToken(token);
     const blogPosts = await blogPostService.getAll();
     res.json(blogPosts);
@@ -29,7 +31,7 @@ const blogPostController = {
 
   async getById(req, res) {
     const token = req.headers.authorization;
-    if (!token) throwTokenError('Token not found');
+    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
     await validateTokenMiddleware.verifyToken(token);
     const { id } = req.params;
     const blogPost = await blogPostService.getById(id);
@@ -39,7 +41,7 @@ const blogPostController = {
 
   async update(req, res) {
     const token = req.headers.authorization;
-    if (!token) throwTokenError('Token not found');
+    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
     const { id } = await validateTokenMiddleware.verifyToken(token);
     await blogPostService.validateBodyUpdate(req.body);
     const blogPost = await blogPostService.getById(req.params.id);
@@ -49,6 +51,16 @@ const blogPostController = {
     res.json(updatedBlogPost);
   },
 
+  async delete(req, res) {
+      const token = req.headers.authorization;
+      if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
+      const { id } = await validateTokenMiddleware.verifyToken(token);
+      const blogPost = await blogPostService.getById(req.params.id);
+      if (!blogPost) throwNotFoundError('Post does not exist');
+      if (blogPost.userId !== id) throwTokenError('Unauthorized user');
+      await blogPostService.delete(req.params);
+      res.send(204);
+  },
 };
 
 module.exports = blogPostController;

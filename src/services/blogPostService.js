@@ -83,6 +83,21 @@ const blogPostService = {
     });
     return updatedBlogPost;
   },
+
+  async delete(params) {
+    const { id } = params;
+    await models.PostCategory.destroy({
+      where: {
+        postId: id,
+      },
+    });
+    const deleted = await models.BlogPost.destroy({
+      where: {
+        id,
+      },
+    });
+    return deleted;
+  },
 };
 
 module.exports = blogPostService;
