@@ -17,6 +17,14 @@ const blogPostController = {
       .map((categoryId) => blogPostService.addPostCategory(blogPostCreated.id, categoryId)));
     res.status(201).json(blogPostCreated);
   },
+
+  async getAll(req, res) {
+    const token = req.headers.authorization;
+    if (!token) throwTokenError('Token not found');
+    await validateTokenMiddleware.verifyToken(token);
+    const blogPosts = await blogPostService.getAll();
+    res.json(blogPosts);
+  },
 };
 
 module.exports = blogPostController;

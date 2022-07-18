@@ -26,6 +26,23 @@ const blogPostService = {
     const postCategory = await models.PostCategory.create({ postId, categoryId });
     return postCategory;
   },
+
+  async getAll() {
+      const blogPosts = await models.BlogPost.findAll({
+        attributes: { exclude: ['UserId'] },
+        include: [{
+          model: models.User, 
+          as: 'user',
+          attributes: { exclude: ['password'] },
+        },
+      {
+        model: models.Category,
+        as: 'categories',
+        through: { attributes: { exclude: ['postId', 'categoryId'] } },
+      }],
+      });
+      return blogPosts;
+  },
 };
 
 module.exports = blogPostService;
