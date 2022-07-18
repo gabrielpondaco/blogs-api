@@ -15,14 +15,7 @@ const blogPostController = {
     const blogPostCreated = await blogPostService.add(req.body, id);
     await Promise.all(req.body.categoryIds
       .map((categoryId) => blogPostService.addPostCategory(blogPostCreated.id, categoryId)));
-    const object = { id: blogPostCreated.id,
-        title: req.body.title,
-        content: req.body.content,
-        userId: id,
-        published: blogPostCreated.published,
-        updated: blogPostCreated.updated,
-      };
-    res.status(201).json(object);
+    res.status(201).json(blogPostCreated);
   },
 };
 
