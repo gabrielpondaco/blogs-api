@@ -85,11 +85,6 @@ const blogPostService = {
   },
 
   async delete(id) {
-    await models.PostCategory.destroy({
-      where: {
-        postId: id,
-      },
-    });
     const deleted = await models.BlogPost.destroy({
       where: {
         id,
