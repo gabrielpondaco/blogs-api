@@ -43,6 +43,24 @@ const blogPostService = {
       });
       return blogPosts;
   },
+
+  async getById(id) {
+    const blogPost = await models.BlogPost.findOne({
+      where: { id },
+      attributes: { exclude: ['UserId'] },
+      include: [{
+        model: models.User, 
+        as: 'user',
+        attributes: { exclude: ['password'] },
+      },
+    {
+      model: models.Category,
+      as: 'categories',
+      through: { attributes: { exclude: ['postId', 'categoryId'] } },
+    }],
+    });
+    return blogPost;
+},
 };
 
 module.exports = blogPostService;

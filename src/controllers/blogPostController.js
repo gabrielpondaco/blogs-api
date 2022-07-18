@@ -1,7 +1,8 @@
 const blogPostService = require('../services/blogPostService');
 const categoriesService = require('../services/categoriesService');
 const validateTokenMiddleware = require('../middlewares/validateTokenMiddleware');
-const { throwTokenError, throwInvalidFieldsError } = require('../services/utils');
+const { throwTokenError, 
+  throwInvalidFieldsError, throwNotFoundError } = require('../services/utils');
 
 const blogPostController = {
   async add(req, res) {
@@ -25,6 +26,17 @@ const blogPostController = {
     const blogPosts = await blogPostService.getAll();
     res.json(blogPosts);
   },
+
+  async getById(req, res) {
+    const token = req.headers.authorization;
+    if (!token) throwTokenError('Token not found');
+    await validateTokenMiddleware.verifyToken(token);
+    const { id } = req.params;
+    const blogPost = await blogPostService.getById(id);
+    if (!blogPost) throwNotFoundError('Post does not exist');
+    res.json(blogPost);
+  },
+
 };
 
 module.exports = blogPostController;
