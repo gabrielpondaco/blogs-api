@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { Op } = require('sequelize');
 const models = require('../database/models');
 
 const blogPostService = {
@@ -91,6 +92,26 @@ const blogPostService = {
       },
     });
     return deleted;
+  },
+
+  async search(q) {
+    const blogPost = await models.BlogPost.findAll({
+      where: { 
+        [Op.or]: [
+          { title: { [Op.like]: `%${q}%` } },
+          { content: { [Op.like]: `%${q}%` } },
+        ],
+       },
+      attributes: { exclude: ['UserId'] },
+      include: [{ model: models.User, as: 'user', attributes: { exclude: ['password'] },
+      },
+    {
+      model: models.Category, 
+      as: 'categories',
+      through: { attributes: { exclude: ['postId', 'categoryId'] } },
+    }],
+    });
+    return blogPost;
   },
 };
 

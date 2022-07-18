@@ -3,6 +3,7 @@ const blogPostController = require('../controllers/blogPostController');
 
 const blogPostRouter = Router();
 
+blogPostRouter.get('/search', blogPostController.search);
 blogPostRouter.delete('/:id', blogPostController.delete);
 blogPostRouter.get('/:id', blogPostController.getById);
 blogPostRouter.put('/:id', blogPostController.update);

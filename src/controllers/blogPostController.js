@@ -52,14 +52,23 @@ const blogPostController = {
   },
 
   async delete(req, res) {
-      const token = req.headers.authorization;
-      if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
-      const { id } = await validateTokenMiddleware.verifyToken(token);
-      const blogPost = await blogPostService.getById(req.params.id);
-      if (!blogPost) throwNotFoundError('Post does not exist');
-      if (blogPost.userId !== id) throwTokenError('Unauthorized user');
-      await blogPostService.delete(req.params.id);
-      res.send(204);
+    const token = req.headers.authorization;
+    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
+    const { id } = await validateTokenMiddleware.verifyToken(token);
+    const blogPost = await blogPostService.getById(req.params.id);
+    if (!blogPost) throwNotFoundError('Post does not exist');
+    if (blogPost.userId !== id) throwTokenError('Unauthorized user');
+    await blogPostService.delete(req.params.id);
+    res.send(204);
+  },
+
+  async search(req, res) {
+    const { q } = req.query;
+    const token = req.headers.authorization;
+    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
+    await validateTokenMiddleware.verifyToken(token);
+    const blogPost = await blogPostService.search(q);
+    res.json(blogPost);
   },
 };
 
