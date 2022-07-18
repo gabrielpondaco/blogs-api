@@ -7,6 +7,8 @@ module.exports = {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         references: {
           model: 'BlogPosts',
           key: 'id'
@@ -16,6 +18,8 @@ module.exports = {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         references: {
           model: 'Categories',
           key: 'id'

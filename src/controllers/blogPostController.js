@@ -58,7 +58,7 @@ const blogPostController = {
       const blogPost = await blogPostService.getById(req.params.id);
       if (!blogPost) throwNotFoundError('Post does not exist');
       if (blogPost.userId !== id) throwTokenError('Unauthorized user');
-      await blogPostService.delete(req.params);
+      await blogPostService.delete(req.params.id);
       res.send(204);
   },
 };

@@ -28,6 +28,14 @@ const userController = {
     const user = await userService.getById(id);
     res.status(200).json(user);
   },
+
+  async delete(req, res) {
+      const token = req.headers.authorization;
+      if (!token) throwTokenError('Token not found');
+      const { id } = await validateTokenMiddleware.verifyToken(token);
+      await userService.delete(id);
+      res.sendStatus(204);
+  },
 };
 
 module.exports = userController; 

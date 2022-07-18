@@ -18,6 +18,7 @@ const attributes = {
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    onDelete: 'CASCADE',
     references: {
       model: 'Users',
       key: 'id',
@@ -35,7 +36,7 @@ const attributes = {
 module.exports = (sequelize) => {
   const blogPost = sequelize.define('BlogPost', attributes, { tableName: 'BlogPosts', timestamps: false });
   blogPost.associate = (models) => {
-    blogPost.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    blogPost.belongsTo(models.User, { foreignKey: 'userId', as: 'user'});
   };
    return blogPost;
 }; 

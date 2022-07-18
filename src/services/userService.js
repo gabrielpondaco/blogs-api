@@ -43,6 +43,14 @@ const userService = {
     const user = await models.User.create(body, { raw: true });
     return user;
   },
+
+  async delete(id) {
+    await models.User.destroy({
+      where: {
+        id,
+      },
+    });
+  },
 };
 
 module.exports = userService;

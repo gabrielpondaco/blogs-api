@@ -5,6 +5,7 @@ const attributes = {
     allowNull: false,
     primaryKey: true,
     type: DataTypes.INTEGER,
+    onDelete: 'CASCADE',
     references: {
       model: "BlogPosts",
       key: "id"
@@ -14,6 +15,7 @@ const attributes = {
     allowNull: false,
     primaryKey: true,
     type: DataTypes.INTEGER,
+    onDelete: 'CASCADE',
     references: {
       model: "Categories",
       key: "id"
