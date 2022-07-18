@@ -37,6 +37,18 @@ const blogPostController = {
     res.json(blogPost);
   },
 
+  async update(req, res) {
+    const token = req.headers.authorization;
+    if (!token) throwTokenError('Token not found');
+    const { id } = await validateTokenMiddleware.verifyToken(token);
+    await blogPostService.validateBodyUpdate(req.body);
+    const blogPost = await blogPostService.getById(req.params.id);
+    if (blogPost.userId !== id) throwTokenError('Unauthorized user');
+    await blogPostService.update(req.body, req.params.id);
+    const updatedBlogPost = await blogPostService.getById(req.params.id);
+    res.json(updatedBlogPost);
+  },
+
 };
 
 module.exports = blogPostController;

@@ -14,6 +14,19 @@ const blogPostService = {
     const result = await schema.validateAsync(body);
     return result;
   },
+
+  async validateBodyUpdate(body) {
+    const schema = Joi.object({
+      title: Joi.string().required(),
+      content: Joi.string().required(),
+    }).messages({
+      'string.empty': 'Some required fields are missing',
+      'any.required': 'Some required fields are missing',
+    });
+    const result = await schema.validateAsync(body);
+    return result;
+  },
+
   async add({ title, content }, id) {
     const published = new Date();
     const updated = new Date();
@@ -60,7 +73,16 @@ const blogPostService = {
     }],
     });
     return blogPost;
-},
+  },
+
+  async update(body, id) {
+    const updatedBlogPost = await models.BlogPost.update(body, {
+      where: {
+        id,
+      },
+    });
+    return updatedBlogPost;
+  },
 };
 
 module.exports = blogPostService;
