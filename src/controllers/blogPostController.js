@@ -4,13 +4,9 @@ const validateTokenMiddleware = require('../middlewares/validateTokenMiddleware'
 const { throwTokenError, 
   throwInvalidFieldsError, throwNotFoundError } = require('../services/utils');
 
-const TOKEN_NOT_FOUND_MESSAGE = 'Token not found';
-
 const blogPostController = {
   async add(req, res) {
-    const token = req.headers.authorization;
-    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
-    const { id } = await validateTokenMiddleware.verifyToken(token);
+    const { id } = await validateTokenMiddleware.verifyToken(req.headers);
     await blogPostService.validateBody(req.body);
     const exist = await Promise.all(req.body.categoryIds
       .map((category) => categoriesService.getById(category)));
@@ -22,17 +18,13 @@ const blogPostController = {
   },
 
   async getAll(req, res) {
-    const token = req.headers.authorization;
-    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
-    await validateTokenMiddleware.verifyToken(token);
+    await validateTokenMiddleware.verifyToken(req.headers);
     const blogPosts = await blogPostService.getAll();
     res.json(blogPosts);
   },
 
   async getById(req, res) {
-    const token = req.headers.authorization;
-    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
-    await validateTokenMiddleware.verifyToken(token);
+    await validateTokenMiddleware.verifyToken(req.headers);
     const { id } = req.params;
     const blogPost = await blogPostService.getById(id);
     if (!blogPost) throwNotFoundError('Post does not exist');
@@ -40,9 +32,7 @@ const blogPostController = {
   },
 
   async update(req, res) {
-    const token = req.headers.authorization;
-    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
-    const { id } = await validateTokenMiddleware.verifyToken(token);
+    const { id } = await validateTokenMiddleware.verifyToken(req.headers);
     await blogPostService.validateBodyUpdate(req.body);
     const blogPost = await blogPostService.getById(req.params.id);
     if (blogPost.userId !== id) throwTokenError('Unauthorized user');
@@ -52,9 +42,7 @@ const blogPostController = {
   },
 
   async delete(req, res) {
-    const token = req.headers.authorization;
-    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
-    const { id } = await validateTokenMiddleware.verifyToken(token);
+    const { id } = await validateTokenMiddleware.verifyToken(req.headers);
     const blogPost = await blogPostService.getById(req.params.id);
     if (!blogPost) throwNotFoundError('Post does not exist');
     if (blogPost.userId !== id) throwTokenError('Unauthorized user');
@@ -64,9 +52,7 @@ const blogPostController = {
 
   async search(req, res) {
     const { q } = req.query;
-    const token = req.headers.authorization;
-    if (!token) throwTokenError(TOKEN_NOT_FOUND_MESSAGE);
-    await validateTokenMiddleware.verifyToken(token);
+    await validateTokenMiddleware.verifyToken(req.headers);
     const blogPost = await blogPostService.search(q);
     res.json(blogPost);
   },

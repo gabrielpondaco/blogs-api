@@ -1,7 +1,6 @@
 const userService = require('../services/userService');
 const loginService = require('../services/loginService');
 const validateTokenMiddleware = require('../middlewares/validateTokenMiddleware');
-const { throwTokenError } = require('../services/utils');
 
 const userController = {
   async add(req, res) {
@@ -13,26 +12,20 @@ const userController = {
   },
 
   async get(req, res) {
-    const token = req.headers.authorization;
-    if (!token) throwTokenError('Token not found');
-    await validateTokenMiddleware.verifyToken(token);
+    await validateTokenMiddleware.verifyToken(req.headers);
     const userList = await userService.getAll();
     res.status(200).json(userList);
   },
 
   async getById(req, res) {
-    const token = req.headers.authorization;
-    if (!token) throwTokenError('Token not found');
-    await validateTokenMiddleware.verifyToken(token);
+    await validateTokenMiddleware.verifyToken(req.headers);
     const { id } = req.params;
     const user = await userService.getById(id);
     res.status(200).json(user);
   },
 
   async delete(req, res) {
-      const token = req.headers.authorization;
-      if (!token) throwTokenError('Token not found');
-      const { id } = await validateTokenMiddleware.verifyToken(token);
+      const { id } = await validateTokenMiddleware.verifyToken(req.headers);
       await userService.delete(id);
       res.sendStatus(204);
   },

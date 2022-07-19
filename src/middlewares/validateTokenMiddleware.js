@@ -5,7 +5,9 @@ require('dotenv').config();
 const secret = process.env.JWT_SECRET;
 
 const validateTokenMiddleware = {
-  async verifyToken(token) {    
+  async verifyToken(headers) {
+    const token = headers.authorization;
+    if (!token) throwTokenError('Token not found');
     try {
       const { data } = jwt.verify(token, secret);
       return data;
