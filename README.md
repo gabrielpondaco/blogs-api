@@ -55,6 +55,7 @@ Existem categorias para os posts, trabalhando, assim, a relação de posts para 
   <summary><strong>Testando as rotas</strong></summary><br />
   
   -Necessário login para obter o token;
+  
   -Utilize o token nos headers das requisições para permissão;
 </details>
 
